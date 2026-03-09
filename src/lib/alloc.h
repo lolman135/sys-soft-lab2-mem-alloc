@@ -33,7 +33,7 @@ typedef struct allocator {
     pthread_mutex_t lock;
 } allocator_t;
 
-// Основные функции аллокатора
+
 allocator_t *create_allocator(void);
 void destroy_allocator(allocator_t *allocator);
 
@@ -41,7 +41,6 @@ void *mem_alloc(allocator_t *allocator, size_t size);
 void mem_free(allocator_t *allocator, void *ptr, size_t size);
 void *mem_realloc(allocator_t *allocator, void *ptr, size_t old_size, size_t new_size);
 
-// Для отладки
 void mem_show(allocator_t *allocator);
 
-#endif // ALLOC_H
+#endif

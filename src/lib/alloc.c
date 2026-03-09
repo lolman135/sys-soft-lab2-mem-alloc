@@ -55,6 +55,8 @@ allocator_t *create_allocator(void) {
 }
 
 void *mem_alloc(allocator_t *allocator, size_t size) {
+    if (size == 0) size = 1;
+    
     pthread_mutex_lock(&allocator->lock);
 
     slab_header_t *slab = allocator->arena->slab_list;
@@ -120,38 +122,40 @@ void *mem_realloc(allocator_t *allocator, void *ptr, size_t old_size, size_t new
 
 void mem_show(allocator_t *allocator) {
     pthread_mutex_lock(&allocator->lock);
-
+    
     slab_header_t *slab = allocator->arena->slab_list;
+    if (!slab) {
+        printf("No slabs allocated yet.\n");
+        pthread_mutex_unlock(&allocator->lock);
+        return;
+    }
+
     while (slab) {
-        printf("Slab (object size: %u bytes, free count: %u, total objects: %u)\n",
-               slab->object_size, slab->free_count,
-               slab->free_count + (SLAB_SIZE / slab->object_size - slab->free_count));
-        printf(" Slab memory block: %p\n", slab->memory);
+        uint32_t total_slots = SLAB_SIZE / slab->object_size;
 
-        void *current_free = slab->free_list;
-        int free_objects = 0;
-        while (current_free) {
-            printf(" Free object: %p\n", current_free);
-            current_free = *((void **)current_free);
-            free_objects++;
-        }
-        if (free_objects == 0) {
-            printf(" No free objects in this slab.\n");
-        }
+        printf("Slab for %u-byte objects:\n", slab->object_size);
+        printf("  • Total slots     : %u\n", total_slots);
+        printf("  • Free            : %u\n", slab->free_count);
+        printf("  • Occupied        : %u\n", total_slots - slab->free_count);
+        printf("  • Memory block    : %p .. %p\n",
+               slab->memory,
+               (char*)slab->memory + SLAB_SIZE - 1);
+        printf("  • Free list head  : %p\n", slab->free_list);
 
-        void *current_object = slab->memory;
-        int occupied_objects = 0;
-        while (current_object < (char *)slab->memory + SLAB_SIZE) {
-            if (current_object != slab->free_list) {
-                printf(" Occupied object: %p\n", current_object);
-                occupied_objects++;
+        if (slab->free_list) {
+            printf("  • Free objects:\n");
+            void *cur = slab->free_list;
+            int count = 0;
+            while (cur) {
+                printf("      %p\n", cur);
+                cur = *(void**)cur;
+                count++;
             }
-            current_object = (char *)current_object + slab->object_size;
+        } else {
+            printf("  • No free objects in this slab.\n");
         }
 
-        printf(" Total allocated objects in this slab: %d (Free: %d, Occupied: %d)\n\n",
-               free_objects + occupied_objects, free_objects, occupied_objects);
-
+        printf("\n");
         slab = slab->next_slab;
     }
 
