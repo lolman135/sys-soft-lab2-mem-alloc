@@ -6,15 +6,20 @@ LIB := $(SRC)/lib
 CFLAGS := -Wall -g -I
 
 MAIN_SRC   := $(SRC)/main.c
-ALLOC_SRC  := $(LIB)/allocator.c
-ALLOC_HDR  := $(LIB)/allocator.h
+ALLOC_SRC  := $(LIB)/alloc.c
+ALLOC_HDR  := $(LIB)/alloc.h
 TEST_SRC   := $(SRC)/test.c
 
-all: clean build 
+all: clean proto_build 
 
 
 clean:
 	rm -rf $(BUILD)
+
+#TODO: delete later
+proto_build:
+	mkdir -p $(BUILD)
+	gcc $(MAIN_SRC) -o $(BUILD)/$(NAME)
 
 
 build:
