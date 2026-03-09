@@ -3,24 +3,18 @@ NAME_TEST := test_$(NAME)
 BUILD := build
 SRC := src
 LIB := $(SRC)/lib
-CFLAGS := -Wall -g -I
+CFLAGS := -Wall -Wextra -pthread -I
 
 MAIN_SRC   := $(SRC)/main.c
 ALLOC_SRC  := $(LIB)/alloc.c
 ALLOC_HDR  := $(LIB)/alloc.h
 TEST_SRC   := $(SRC)/test.c
 
-#TODO: Change later to default flow: clean build
-all: clean proto_build 
+all: clean build 
 
 
 clean:
 	rm -rf $(BUILD)
-
-#Build of prototype
-proto_build:
-	mkdir -p $(BUILD)
-	gcc $(MAIN_SRC) -o $(BUILD)/$(NAME)
 
 build:
 	mkdir -p $(BUILD)
