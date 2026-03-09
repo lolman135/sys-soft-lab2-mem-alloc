@@ -10,17 +10,17 @@ ALLOC_SRC  := $(LIB)/alloc.c
 ALLOC_HDR  := $(LIB)/alloc.h
 TEST_SRC   := $(SRC)/test.c
 
+#TODO: Change later to default flow: clean build
 all: clean proto_build 
 
 
 clean:
 	rm -rf $(BUILD)
 
-#TODO: delete later
+#Build of prototype
 proto_build:
 	mkdir -p $(BUILD)
 	gcc $(MAIN_SRC) -o $(BUILD)/$(NAME)
-
 
 build:
 	mkdir -p $(BUILD)
@@ -31,7 +31,7 @@ build_test:
 	gcc $(CFLAGS) $(LIB) $(TEST_SRC) $(ALLOC_SRC) -o $(BUILD)/$(NAME_TEST)
 
 
-run: clean build
+run: all
 	./$(BUILD)/$(NAME)
 
 test: clean build_test
