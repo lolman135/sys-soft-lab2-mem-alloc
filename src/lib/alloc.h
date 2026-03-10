@@ -5,10 +5,6 @@
 #include <pthread.h>
 #include <stddef.h>
 
-#define PAGE_SIZE 4096
-#define ARENA_SIZE (PAGE_SIZE * 10)
-#define SLAB_SIZE  (PAGE_SIZE * 2)
-
 typedef struct slab_header {
     struct slab_header *next_slab;
     uint32_t object_size;

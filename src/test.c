@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define MAX_BLOCKS 2048
-#define ITERATIONS 20
+#define ITERATIONS 80
 #define MAX_ALLOC_SIZE 8192
 #define MIN_ALLOC_SIZE 1
 
