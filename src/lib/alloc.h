@@ -35,7 +35,7 @@ typedef struct allocator {
 
 
 allocator_t *create_allocator(void);
-void destroy_allocator(allocator_t *allocator);
+void allocator_destroy(allocator_t *allocator);
 
 void *mem_alloc(allocator_t *allocator, size_t size);
 void mem_free(allocator_t *allocator, void *ptr, size_t size);

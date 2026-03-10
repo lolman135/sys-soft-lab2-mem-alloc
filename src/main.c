@@ -19,7 +19,7 @@ int main(void) {
     printf("\nMemory deallocation done.\n");
     mem_show(allocator);
 
-    destroy_allocator(allocator);
+    allocator_destroy(allocator);
 
     return 0;
 }

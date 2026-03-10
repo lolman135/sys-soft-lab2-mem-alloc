@@ -162,7 +162,7 @@ void mem_show(allocator_t *allocator) {
     pthread_mutex_unlock(&allocator->lock);
 }
 
-void destroy_allocator(allocator_t *allocator) {
+void allocator_destroy(allocator_t *allocator) {
     if (!allocator) return;
 
     pthread_mutex_lock(&allocator->lock);
